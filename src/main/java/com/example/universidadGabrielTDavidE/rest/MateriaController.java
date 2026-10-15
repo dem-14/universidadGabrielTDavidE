@@ -1,7 +1,9 @@
 package com.example.universidadGabrielTDavidE.rest;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,25 +15,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.universidadGabrielTDavidE.dao.MateriaDAO;
+import com.example.universidadGabrielTDavidE.dao.ProfesorDAO;
 import com.example.universidadGabrielTDavidE.entity.Materia;
-import com.example.universidadGabrielTDavidE.exception.GlobalExceptionHandler;
+import com.example.universidadGabrielTDavidE.entity.Profesor;
 import com.example.universidadGabrielTDavidE.exception.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("/api/materias")
-public class MateriaRestController {
-
+public class MateriaController {
 
 	private MateriaDAO materiaDAO;
-	/*
-	private final ProfesorDAO profesorDAO;
+	private ProfesorDAO profesorDAO;
 
 	@Autowired
-    public MateriaController(MateriaDAO materiaDAO, ProfesorDAO profesorDAO) {
-        this.materiaDAO = materiaDAO;
-        this.profesorDAO = profesorDAO;
-    }
-	 */
+	public MateriaController(MateriaDAO materiaDAO, ProfesorDAO profesorDAO) {
+		this.materiaDAO = materiaDAO;
+		this.profesorDAO = profesorDAO;
+	}
+
 	@GetMapping
 	public List<Materia> getAll() {
 		return materiaDAO.getAll();
@@ -49,11 +50,11 @@ public class MateriaRestController {
 	@PostMapping
 	@Transactional
 	public Materia save(@RequestBody Materia materia) {
-		// Aseguramos que se cree un nuevo registro asignando el id en 0
-		materia.setId(0);
-
+		if (materia == null) {
+			throw new ResourceNotFoundException("No se puede eliminar. Materia no encontrada - Id: " + materia.getId());
+		}
 		// Verificación opcional por si envían un profesor en el cuerpo JSON
-		//verificarProfesorExistente(materia);
+		verificarProfesorExistente(materia);
 
 		return materiaDAO.save(materia);
 	}
@@ -68,7 +69,7 @@ public class MateriaRestController {
 		}
 
 		// Validamos que el profesor asociado exista en el sistema
-		//verificarProfesorExistente(materia);
+		verificarProfesorExistente(materia);
 
 		return materiaDAO.update(materia);
 	}
@@ -86,19 +87,19 @@ public class MateriaRestController {
 
 	// Método privado de soporte para evitar código repetido en las validaciones de
 	// llaves foráneas
-	/*
 	private void verificarProfesorExistente(Materia materia) {
 		if (materia.getProfesor() != null && materia.getProfesor().getId() != 0) {
-			int profId = materia.getProfesor().getId();
-			Profesor profesor = profesorDAO.getId(profId);
+			long profId = materia.getProfesor().getId();
+			Profesor profesor = profesorDAO.findById(profId).orElse(null);
+
 			if (profesor == null) {
 				throw new ResourceNotFoundException(
 						"Operación inválida. El profesor asignado con Id " + profId + " no existe.");
 			}
+
 			// Reasignamos el profesor persistido completo a la materia
 			materia.setProfesor(profesor);
 		}
-		
 	}
-	 */
+
 }

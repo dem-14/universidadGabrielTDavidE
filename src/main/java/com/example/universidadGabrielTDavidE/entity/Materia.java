@@ -16,39 +16,39 @@ public class Materia {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private long id;
 
 	@Column(name = "nombre", nullable = false, length = 100)
 	private String nombre;
 
-	@Column(name = "creditoscantidad", nullable = false)
+	@Column(name = "creditos", nullable = false)
 	private int creditoscantidad;
 
-	@Column(name = "horascatedra", nullable = false)
+	@Column(name = "horas_clase", nullable = false)
 	private int horascatedra;
-/*
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "profesor_id")
-	//private Profesor profesor;
-*/
+	private Profesor profesor;
+
 	// Constructores
 	public Materia() {
 	}
 
-	public Materia(String nombre, int creditoscantidad, int horascatedra) {
+	public Materia(String nombre, int creditoscantidad, int horascatedra, Profesor profesor) {
 		this.nombre = nombre;
 		this.creditoscantidad = creditoscantidad;
 		this.horascatedra = horascatedra;
-		//this.profesor = profesor;
+		this.profesor = profesor;
 		
 	}
 
 	// Getters y Setters
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -76,7 +76,7 @@ public class Materia {
 		this.horascatedra = horascatedra;
 	}
 
-/*	
+	
 	public Profesor getProfesor() {
 		return profesor;
 	}
@@ -84,5 +84,5 @@ public class Materia {
 	public void setProfesor(Profesor profesor) {
 		this.profesor = profesor;
 	}
-	*/
+	
 }

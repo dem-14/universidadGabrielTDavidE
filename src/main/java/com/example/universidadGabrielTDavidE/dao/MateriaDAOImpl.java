@@ -29,7 +29,7 @@ public class MateriaDAOImpl implements MateriaDAO {
     }
 
     @Override
-    public Materia getId(int id) {
+    public Materia getId(long id) {
         return entityManager.find(Materia.class, id);
     }
 
@@ -45,7 +45,7 @@ public class MateriaDAOImpl implements MateriaDAO {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         Materia materia = entityManager.find(Materia.class, id);
         if (materia != null) {
             entityManager.remove(materia);
