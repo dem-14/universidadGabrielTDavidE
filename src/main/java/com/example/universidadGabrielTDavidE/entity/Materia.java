@@ -1,5 +1,7 @@
 package com.example.universidadGabrielTDavidE.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,11 +26,11 @@ public class Materia {
 	@Column(name = "creditos", nullable = false)
 	private int creditoscantidad;
 
-	@Column(name = "horas_clase", nullable = false)
-	private int horascatedra;
-
+	@Column(name = "horas_clase", nullable = true) 
+	private Integer horascatedra;
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "profesor_id")
+	@JoinColumn(name = "id_profesor") 
+	@JsonIgnore 
 	private Profesor profesor;
 
 	// Constructores

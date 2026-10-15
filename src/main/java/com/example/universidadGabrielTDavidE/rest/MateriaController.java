@@ -1,7 +1,6 @@
 package com.example.universidadGabrielTDavidE.rest;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,14 +89,11 @@ public class MateriaController {
 	private void verificarProfesorExistente(Materia materia) {
 		if (materia.getProfesor() != null && materia.getProfesor().getId() != 0) {
 			long profId = materia.getProfesor().getId();
-			Profesor profesor = profesorDAO.findById(profId).orElse(null);
+			// Buscamos el profesor y, si no existe, lanzamos la excepción inmediatamente
+			Profesor profesor = profesorDAO.findById(profId).orElseThrow(() -> new ResourceNotFoundException(
+					"Operación inválida. El profesor asignado con Id " + profId + " no existe."));
 
-			if (profesor == null) {
-				throw new ResourceNotFoundException(
-						"Operación inválida. El profesor asignado con Id " + profId + " no existe.");
-			}
-
-			// Reasignamos el profesor persistido completo a la materia
+			// Si llegó aquí, el profesor existe y lo reasignamos completo
 			materia.setProfesor(profesor);
 		}
 	}
