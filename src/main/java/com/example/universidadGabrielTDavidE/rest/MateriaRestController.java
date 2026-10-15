@@ -1,4 +1,4 @@
-package com.example.universidadGabrielTDavidE.controller;
+package com.example.universidadGabrielTDavidE.rest;
 
 import java.util.List;
 
